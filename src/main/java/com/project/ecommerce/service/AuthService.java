@@ -15,30 +15,16 @@ public class AuthService {
         this.userRepository = userRepository;
     }
 
-    public boolean login(String email, String password) {
-        Optional<User> optionalUser = Optional.ofNullable(userRepository.findByEmail(email));
-
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (user.getPassword().equals(password)) {
-                System.out.println("✅ Login successful for user: " + email);
-                return true;
-            } else {
-                System.out.println("❌ Incorrect password for user: " + email);
-            }
-        } else {
-            System.out.println("❌ No user found with email: " + email);
-        }
-
-        return false;
-    }
-
     public boolean checkUserExists(String email) {
-        return userRepository.findByEmail(email) != null;
+        return userRepository.existsByEmail(email);
     }
 
     public void registerUser(User user) {
         userRepository.save(user);
-        System.out.println("✅ Registered new user with email: " + user.getEmail());
+    }
+
+    public boolean login(String email, String password) {
+        User user = userRepository.findByEmail(email);
+        return user != null && user.getPassword().equals(password); // add hashing in real apps
     }
 }
