@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        .cart-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .cart-item {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px;
+            width: 300px;
+            background-color: white;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #c82333;
+        }
+        .checkout {
+            margin-top: 20px;
+            display: inline-block;
+            font-size: 18px;
+            color: white;
+            background-color: #28a745;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .checkout:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Your Shopping Cart</h1>
+
+    <div th:if="${cartEmpty}">
+        <p>Your cart is empty!</p>
+    </div>
+
+    <div th:unless="${cartEmpty}" class="cart-list">
+        <div th:each="product : ${cart}" class="cart-item">
+            <h3 th:text="${product.name}"></h3>
+            <p th:text="${product.description}"></p>
+            <p><strong>Price: $</strong><span th:text="${product.price}"></span></p>
+        </div>
+    </div>
+
+    <a href="/products" class="btn">Continue Shopping</a>
+    <a href="/checkout" class="checkout">Proceed to Checkout</a>
+
+</body>
+</html>

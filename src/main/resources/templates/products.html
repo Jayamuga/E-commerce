@@ -1,0 +1,88 @@
+<script>
+    async function loadProducts() {
+        console.log("📡 Starting to load products...");
+
+        try {
+            const response = await fetch('/api/products');
+            console.log("🔁 Status code:", response.status);
+
+            if (!response.ok) {
+                throw new Error('❌ Network response was not ok');
+            }
+
+            const products = await response.json();
+            console.log("✅ Products fetched:", products);
+
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+
+            products.forEach(product => {
+                const item = document.createElement('div');
+                item.innerHTML = `
+                    <p><strong>${product.name}</strong> - $${product.price}</p>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                `;
+                productList.appendChild(item);
+            });
+
+        } catch (error) {
+            document.getElementById('product-list').innerHTML = '<p style="color:red;">Failed to load products.</p>';
+            console.error('❌ Error loading products:', error);
+        }
+    }
+
+    function addToCart(productId) {
+        alert('Product ' + productId + ' added to cart!');
+    }
+
+    window.onload = loadProducts;
+</script>
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <script>
+        async function loadProducts() {
+            try {
+                const response = await fetch('/api/products');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const products = await response.json();
+                const productList = document.getElementById('product-list');
+                productList.innerHTML = '';
+
+                products.forEach(product => {
+                    const item = document.createElement('div');
+                    item.innerHTML = `
+                        <p><strong>${product.name}</strong> - $${product.price}</p>
+                        <button onclick="addToCart(${product.id})">Add to Cart</button>
+                    `;
+                    productList.appendChild(item);
+                });
+
+            } catch (error) {
+                document.getElementById('product-list').innerHTML = '<p style="color:red;">Failed to load products.</p>';
+                console.error('Error loading products:', error);
+            }
+        }
+
+        function addToCart(productId) {
+            alert('Product ' + productId + ' added to cart!');
+            // You can implement cart functionality here or call an API
+        }
+
+        window.onload = loadProducts;
+    </script>
+</head>
+<body>
+    <h1>Products</h1>
+    <div id="product-list">Loading...</div>
+    <br>
+    <a href="/cart">Go to Cart</a>
+</body>
+</html>

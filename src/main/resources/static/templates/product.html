@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <script>
+        async function loadProducts() {
+            const response = await fetch('/api/products');  // Fetch from API
+            const products = await response.json();
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+
+            products.forEach(product => {
+                const item = document.createElement('div');
+                item.innerHTML = `
+                    <p><strong>${product.name}</strong> - $${product.price}</p>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                `;
+                productList.appendChild(item);
+            });
+        }
+
+        function addToCart(productId) {
+            alert('Product ' + productId + ' added to cart!');
+            // Implement cart logic here
+        }
+
+        window.onload = loadProducts;
+    </script>
+</head>
+<body>
+    <h1>Products</h1>
+    <div id="product-list">Loading...</div>
+    <br>
+    <a href="/cart">Go to Cart</a>
+</body>
+</html>
