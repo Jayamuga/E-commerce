@@ -10,7 +10,7 @@
 
     <!-- Add Product Form -->
     <h4>Add New Product</h4>
-    <form th:action="@{/products/add}" method="post" class="mb-4">
+    <form th:action="@{/admin/dashboard}" method="post" class="mb-4">
         <input type="text" name="name" placeholder="Product Name" required class="form-control mb-2"/>
         <input type="text" name="description" placeholder="Description" required class="form-control mb-2"/>
         <input type="number" step="0.01" name="price" placeholder="Price" required class="form-control mb-2"/>

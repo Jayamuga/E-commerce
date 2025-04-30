@@ -21,7 +21,7 @@ public class PageController {
     }
 
     @GetMapping("/login")
-    public String loginPage() {
+    public String login() {
         return "login"; // will load templates/login.html
     }
 

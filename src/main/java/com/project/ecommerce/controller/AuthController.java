@@ -46,28 +46,12 @@ public class AuthController {
 
 
 	
+	@PostMapping("/login")
+    public String login() {
+        // Authentication is fully handled by Spring Security.
+        return "redirect:/products";
+    }
+	  
+	 
 	
-	  @PostMapping("/api/login")
-	  
-	  @ResponseBody public ResponseEntity<?> apiLogin(@RequestBody Map<String,
-	  String> payload, HttpSession session) { String email = payload.get("email");
-	  String password = payload.get("password");
-	  
-	  boolean authenticated = authService.login(email, password); if
-	  (authenticated) { User user = authService.getUserByEmail(email);
-	  session.setAttribute("user", user); session.setAttribute("userId",
-	  user.getId()); return ResponseEntity.ok("Login successful"); } else { return
-	  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials"); }
-	  }
-	 
-	 
-
-	@GetMapping("/test")
-	@ResponseBody
-	public String testInsert() {
-		User user = new User("TestUser", "test@user.com", "pass123");
-		user.setRole("ROLE_USER");
-		userRepository.save(user);
-		return "Inserted test user.";
-	}
 }

@@ -1,58 +1,61 @@
 package com.project.ecommerce.config;
 
+import com.project.ecommerce.service.AuthService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-
-import com.project.ecommerce.service.AuthService;
-
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Bean
-	public UserDetailsService userDetailsService(AuthService authService) {
-	    return authService;
-	}
+    private final AuthService authService;
 
+    public SecurityConfig(AuthService authService) {
+        this.authService = authService;
+    }
 
-    // ✅ Configure role-based access
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return authService;
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(authService);
+        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance()); // plain text passwords
+        return provider;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(auth -> auth
-                // Allow unauthenticated access to common endpoints
-                .requestMatchers("/auth/**","/cart/**", "/register","/auth/register", "/login", "/css/**", "/js/**").permitAll()
-
-                // Admin-only routes (create, update, delete products)
-                .requestMatchers("/admin/**","/products/add", "/products/delete/**").hasRole("ADMIN")
-
-                // User-only routes (cart actions)
-                .requestMatchers("/cart/**", "/checkout","/cart","/cart/add").hasRole("USER")
-
-                // All authenticated users can view products
-                .requestMatchers("/products", "/products/**").authenticated()
-
-                // Everything else
+                .requestMatchers("/auth/**", "/register", "/login", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/admin/**", "/products/add", "/products/delete/**").hasRole("ADMIN")
+                .requestMatchers("/cart/**", "/checkout").hasRole("USER")
+                .requestMatchers("/products/**").authenticated()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/products", true)
+                .defaultSuccessUrl("/login-success", true)
+
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
             )
-            .csrf(csrf -> csrf.disable()); // Only disable for development/test
+            .csrf(csrf -> csrf.disable());
 
         return http.build();
     }

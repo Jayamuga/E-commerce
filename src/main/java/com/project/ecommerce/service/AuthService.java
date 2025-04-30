@@ -22,15 +22,22 @@ public class AuthService implements UserDetailsService {
     // Used by Spring Security for authentication
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.println("🔍 Trying to load user with email: " + email);
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        System.out.println("✅ Loaded user: " + user.getEmail() + ", Role: " + user.getRole());
+
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                "{noop}" + user.getPassword(), // no password encoder
-                List.of(new SimpleGrantedAuthority(user.getRole())) // e.g. ROLE_ADMIN
-        );
+        	    user.getEmail(),
+        	    user.getPassword(), // ✅ let the PasswordEncoder handle it
+        	    List.of(new SimpleGrantedAuthority(user.getRole()))
+        	);
+
     }
+
+
     
     public boolean login(String email, String password) {
         return userRepository.findByEmail(email)

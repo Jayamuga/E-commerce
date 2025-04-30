@@ -14,26 +14,27 @@
     <div class="row justify-content-center">
         <div class="col-md-4">
 
-            <!-- Message Handling -->
-            <div th:if="${param.message}" class="alert alert-danger" role="alert">
-                Account already exists. Please login.
-            </div>
+            <!-- Login error handling by Spring Security -->
             <div th:if="${param.error}" class="alert alert-danger" role="alert">
                 Invalid email or password.
             </div>
+            
+            <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                You've been successfully logged out.
+            </div>
 
-			<form th:action="@{/login}" method="post">
-			    <div class="mb-3">
-			        <input type="text" name="username" class="form-control" placeholder="Email" required>
-			    </div>
-			    <div class="mb-3">
-			        <input type="password" name="password" class="form-control" placeholder="Password" required>
-			    </div>
-			    <button type="submit" class="btn btn-primary w-100">Login</button>
-			</form>
+            <form th:action="@{/login}" method="post">
+                <div class="mb-3">
+                    <input type="email" name="username" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="mb-3">
+                    <input type="password" name="password" class="form-control" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
 
             <div class="text-center mt-3">
-                <a href="/register" class="btn btn-link">New user? Register here</a>
+                <a th:href="@{/register}" class="btn btn-link">New user? Register here</a>
             </div>
 
         </div>
