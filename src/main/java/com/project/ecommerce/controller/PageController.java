@@ -2,14 +2,18 @@ package com.project.ecommerce.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import jakarta.servlet.http.HttpSession;
+import com.project.ecommerce.service.ProductService;
+import org.springframework.ui.Model;
 
 @Controller
 public class PageController {
 
-   
+	private final ProductService productService;
+
+    public PageController(ProductService productService) {
+        this.productService = productService;
+    }
+
 
     @GetMapping("/")
     public String homePage() {
@@ -31,16 +35,12 @@ public class PageController {
         return "checkout"; // Loads checkout.html
     }
 
-    @GetMapping("/products")
-    public String productsPage(HttpSession session) {
-        System.out.println("📦 Entered /products route");
-        Object user = session.getAttribute("user");
-        if (user == null) {
-            System.out.println("⚠️ No user in session. Redirecting to login.");
-            return "redirect:/login";
-        }
-        System.out.println("✅ User found: " + user.toString());
-        return "products"; // products.html under /templates
-    }
+	
+	/*
+	 * @GetMapping("/products") public String productsPage(Model model) {
+	 * model.addAttribute("products", productService.getAllProducts()); return
+	 * "products"; // this should match your template name: products.html }
+	 */
+	 
 
 }

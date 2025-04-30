@@ -137,6 +137,14 @@
             <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
+        
+        <!-- Thymeleaf extras for Spring Security -->
+		<dependency>
+		    <groupId>org.thymeleaf.extras</groupId>
+		    <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+		    <version>3.1.1.RELEASE</version>
+		</dependency>
+
 
     </dependencies>
 

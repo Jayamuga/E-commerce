@@ -13,10 +13,21 @@ public class Product {
     private String description;
     private double price;
 
+    // 🔥 ADD THIS FIELD
+    private String imageUrl;
+
+    // 🔥 ADD Getter and Setter for imageUrl
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
     // Constructors
     public Product() {}
 
-    public Product(String name, String description, double price) {
+    public Product(String name, String description, double price,String ImageUrl) {
         this.name = name;
         this.description = description;
         this.price = price;

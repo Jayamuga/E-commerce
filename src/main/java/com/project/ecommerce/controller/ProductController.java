@@ -1,65 +1,43 @@
 package com.project.ecommerce.controller;
 
 import com.project.ecommerce.model.Product;
-import com.project.ecommerce.service.ProductService;
-import org.springframework.http.ResponseEntity;
+import com.project.ecommerce.repository.ProductRepository;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/products")
+@Controller
+@RequestMapping("/products")
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductRepository productRepository;
 
-    // Constructor-based dependency injection
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    // ✅ Constructor Injection
+    public ProductController(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
-    // ✅ GET all products (used by JS in products.html)
+    // ✅ Show Products page
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        return products.isEmpty()
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.ok(products);
+    public String showProducts(Model model) {
+        model.addAttribute("products", productRepository.findAll());
+        model.addAttribute("newProduct", new Product());
+        return "products"; 
     }
 
-    // ✅ GET product by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
-        return product != null
-                ? ResponseEntity.ok(product)
-                : ResponseEntity.notFound().build();
+    // ✅ Add new Product
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/add")
+    public String addProduct(@ModelAttribute("newProduct") Product product) {
+        productRepository.save(product);
+        return "redirect:/products"; 
     }
-
-    // ✅ POST a new product
-    @PostMapping
-    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
-        Product createdProduct = productService.addProduct(product);
-        return ResponseEntity.status(201).body(createdProduct);
-    }
-
-    // ✅ PUT (update) a product
-    @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id,
-                                                 @RequestBody Product updatedProduct) {
-        Product updated = productService.updateProduct(id, updatedProduct);
-        return updated != null
-                ? ResponseEntity.ok(updated)
-                : ResponseEntity.notFound().build();
-    }
-
-    // ✅ DELETE a product
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        boolean deleted = productService.deleteProduct(id);
-        return deleted
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.notFound().build();
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productRepository.deleteById(id);
+        return "redirect:/products";
     }
 }
-

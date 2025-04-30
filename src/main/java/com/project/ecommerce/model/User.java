@@ -14,9 +14,19 @@ public class User {
 
     private String name;
     private String email;
-    private String password; // ✅ Add password field
+    private String password;
+    @Column(nullable = false)
+    private String role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
 
     // Constructors
