@@ -35,13 +35,22 @@
                         <img th:src="${product.imageUrl}" alt="Product Image" style="width:100px; height:auto;">
                     </td>
                     <td>
-                        <a href="/products" class="btn btn-primary btn-sm">Continue Shopping</a>
+                        <div class="d-flex flex-column gap-2">
+                            <!-- Remove from cart -->
+                            <form th:action="@{/cart/remove}" method="post">
+                                <input type="hidden" name="productId" th:value="${product.id}" />
+                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                            </form>
+
+                            <!-- Continue shopping -->
+                            <a href="/products" class="btn btn-primary btn-sm">Continue Shopping</a>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
 
-        <div class="mt-4">
+        <div class="mt-4 text-end">
             <a href="/checkout" class="btn btn-success btn-lg">Proceed to Checkout</a>
         </div>
     </div>
