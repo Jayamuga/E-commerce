@@ -1,7 +1,11 @@
 package com.project.ecommerce.controller;
 
 import com.project.ecommerce.model.Product;
+import com.project.ecommerce.model.User;
 import com.project.ecommerce.repository.ProductRepository;
+import com.project.ecommerce.service.AuthService;
+
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication; // ✅ Correct import
@@ -17,19 +21,28 @@ import java.util.List;
 public class AdminController {
 
     private final ProductRepository productRepository;
+    private final AuthService authService;
+    
 
-    public AdminController(ProductRepository productRepository) {
+    public AdminController(ProductRepository productRepository, AuthService authService) {
         this.productRepository = productRepository;
+        this.authService = authService; 
     }
 
     @GetMapping("/login-success")
-    public String loginSuccess(Authentication auth) {
+    public String loginSuccess(Authentication auth, HttpSession session) {
+        String email = auth.getName();
+        User user = authService.getUserByEmail(email);
+        
+        session.setAttribute("userId", user.getId()); // ✅ store userId
+
         if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             return "redirect:/admin/dashboard";
         } else {
             return "redirect:/products";
         }
     }
+
 
     @PostMapping("/admin/dashboard")
     @PreAuthorize("hasRole('ADMIN')")
