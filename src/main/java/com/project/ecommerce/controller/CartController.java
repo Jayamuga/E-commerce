@@ -94,11 +94,17 @@ public class CartController {
                 .mapToDouble(Product::getPrice)
                 .sum();
 
+        for (Product product : cartProducts) {
+            System.out.println("Product: " + product.getName() + " | Price: " + product.getPrice());
+        }
+
+        
         model.addAttribute("cart", cartProducts);
         model.addAttribute("total", total);
 
         return "checkout";
     }
+
 
     @PostMapping("/place-order")
     public String placeOrder(HttpSession session) {

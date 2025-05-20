@@ -9,28 +9,28 @@
 <div class="container mt-5">
     <h2>🧾 Checkout Summary</h2>
 
+    <!-- Display cart products -->
     <table class="table table-striped mt-4">
         <thead>
-        <tr>
-            <th>Product</th>
-            <th>Price</th>
-        </tr>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+            </tr>
+			
         </thead>
         <tbody>
-        <tr th:each="product : ${cart}">
-            <td th:text="${product.name}">Product Name</td>
-            <td>$<span th:text="${product.price}">0.00</span></td>
-        </tr>
+            <!-- Loop through products -->
+            <tr th:each="product : ${cart}">
+                <td th:text="${product.name}">Product Name</td>
+                <td>$<span th:text="${product.price}">0.00</span></td>
+            </tr>
         </tbody>
     </table>
 
+    <!-- Total amount -->
     <h4 class="mt-4">Total: $<span th:text="${total}">0.00</span></h4>
 
+    <!-- Order actions -->
     <form method="post" th:action="@{/cart/place-order}">
         <button type="submit" class="btn btn-success mt-3">Place Order</button>
-        <a href="/cart" class="btn btn-secondary mt-3 ms-2">Go Back to Cart</a>
-    </form>
-</div>
-
-</body>
-</html>
+        <
