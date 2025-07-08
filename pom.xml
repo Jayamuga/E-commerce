@@ -19,7 +19,8 @@
     <description>Final project With Spring Boot</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
+    <maven.compiler.release>17</maven.compiler.release>
     </properties>
 
     <dependencies>
