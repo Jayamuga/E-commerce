@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; margin: 50px; }
+        h1 { color: #333; }
+        .btn { padding: 10px 20px; font-size: 18px; color: white; background-color: #28a745; border: none; border-radius: 5px; text-decoration: none; cursor: pointer; }
+        .btn:hover { background-color: #218838; }
+        .message { color: red; font-weight: bold; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <h1>Register</h1>
+    <p>Create an account to start shopping!</p>
+
+    <div class="message">
+        <script>
+            const params = new URLSearchParams(window.location.search);
+            if (params.has("exists")) {
+                document.write("Account already exists. Redirecting to login...");
+                setTimeout(() => { window.location.href = "/login"; }, 2000);
+            }
+        </script>
+    </div>
+
+    <form action="/auth/register" method="post">
+        <input type="text" name="name" placeholder="Enter your name" required><br><br>
+        <input type="email" name="email" placeholder="Enter your email" required><br><br>
+        <input type="password" name="password" placeholder="Enter your password" required><br><br>
+        <button type="submit" class="btn">Register</button>
+    </form>
+
+    <br>
+    <a href="/login" class="btn">Already have an account? Login</a>
+
+</body>
+</html>
