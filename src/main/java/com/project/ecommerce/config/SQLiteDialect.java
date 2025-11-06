@@ -9,7 +9,7 @@ import org.hibernate.type.SqlTypes;
 public class SQLiteDialect extends Dialect {
 
     public SQLiteDialect() {
-        super(DatabaseVersion.make(3)); // SQLite version 3.x
+        super(DatabaseVersion.make(3)); // SQLite 3.x
     }
 
     @Override
@@ -37,21 +37,36 @@ public class SQLiteDialect extends Dialect {
         return false;
     }
 
-    // ✅ Corrected method signature:
-    @Override
-    public String getTypeName(int jdbcTypeCode) {
-        return switch (jdbcTypeCode) {
-            case SqlTypes.VARCHAR, SqlTypes.LONGVARCHAR -> "TEXT";
-            case SqlTypes.INTEGER, SqlTypes.BIGINT, SqlTypes.SMALLINT -> "INTEGER";
-            case SqlTypes.FLOAT, SqlTypes.DOUBLE, SqlTypes.NUMERIC, SqlTypes.DECIMAL -> "REAL";
-            case SqlTypes.BLOB, SqlTypes.BINARY, SqlTypes.VARBINARY, SqlTypes.LONGVARBINARY -> "BLOB";
-            case SqlTypes.BOOLEAN -> "INTEGER";
-            default -> super.getTypeName(jdbcTypeCode);
-        };
+    // ✅ Updated for Hibernate 6.x (removed @Override)
+    public String getTypeName(int code, long length, int precision, int scale) {
+        switch (code) {
+            case SqlTypes.VARCHAR:
+            case SqlTypes.LONGVARCHAR:
+                return "TEXT";
+            case SqlTypes.INTEGER:
+            case SqlTypes.BIGINT:
+            case SqlTypes.SMALLINT:
+                return "INTEGER";
+            case SqlTypes.FLOAT:
+            case SqlTypes.DOUBLE:
+            case SqlTypes.NUMERIC:
+            case SqlTypes.DECIMAL:
+                return "REAL";
+            case SqlTypes.BLOB:
+            case SqlTypes.BINARY:
+            case SqlTypes.VARBINARY:
+            case SqlTypes.LONGVARBINARY:
+                return "BLOB";
+            case SqlTypes.BOOLEAN:
+                return "INTEGER";
+            default:
+                return "TEXT"; // Fallback type
+        }
     }
 }
 
 class SQLiteIdentityColumnSupport extends IdentityColumnSupportImpl {
+
     @Override
     public boolean supportsIdentityColumns() {
         return true;
@@ -64,6 +79,7 @@ class SQLiteIdentityColumnSupport extends IdentityColumnSupportImpl {
 
     @Override
     public String getIdentityColumnString(int type) {
+        // ✅ SQLite uses INTEGER PRIMARY KEY AUTOINCREMENT for identity
         return "INTEGER PRIMARY KEY AUTOINCREMENT";
     }
 }
