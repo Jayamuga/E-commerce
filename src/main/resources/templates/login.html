@@ -3,22 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Tokyo Drift Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Fullscreen video background */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(40%) saturate(120%);
+        }
+
+        /* Glassmorphism effect for login card */
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(255, 0, 100, 0.5);
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        /* Neon text glow */
+        h1 {
+            color: #fff;
+            text-shadow: 0 0 10px #ff0080, 0 0 20px #ff0080;
+            font-weight: bold;
+            letter-spacing: 1px;
+            animation: glowPulse 2s infinite alternate;
+        }
+
+        /* Input styling */
+        .form-control {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(90deg, #ff0080, #ff8c00);
+            border: none;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #ff0080;
+        }
+
+        .btn-link {
+            color: #ff8c00;
+            text-decoration: none;
+        }
+
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes glowPulse {
+            from { text-shadow: 0 0 10px #ff0080; }
+            to { text-shadow: 0 0 20px #ff0080, 0 0 40px #ff0080; }
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+    </style>
 </head>
+
 <body>
+    <!-- Tokyo Drift background video -->
+    <video autoplay muted loop class="video-bg">
+        <source src="https://cdn.coverr.co/videos/coverr-night-car-drive-2097/1080p.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
-<div class="container mt-5">
-    <h1 class="mb-4 text-center">Login</h1>
+    <div class="container d-flex align-items-center justify-content-center vh-100">
+        <div class="login-card col-md-4">
+            <h1 class="text-center mb-4">Tokyo Drift Login</h1>
 
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-
-            <!-- Login error handling by Spring Security -->
+            <!-- Spring Security error messages -->
             <div th:if="${param.error}" class="alert alert-danger" role="alert">
                 Invalid email or password.
             </div>
-            
             <div th:if="${param.logout}" class="alert alert-success" role="alert">
                 You've been successfully logged out.
             </div>
@@ -36,10 +124,8 @@
             <div class="text-center mt-3">
                 <a th:href="@{/register}" class="btn btn-link">New user? Register here</a>
             </div>
-
         </div>
     </div>
-</div>
 
 </body>
 </html>
