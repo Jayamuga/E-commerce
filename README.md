@@ -1,7 +1,7 @@
 # E-Commerce Website
 
 ## Overview
-This is a full-stack e-commerce web application built with **Spring Boot (Java)** for the backend, **Angular** for the frontend, and **PostgreSQL** for the database. The application allows users to browse products, manage a shopping cart, place orders, and process payments. Admin users can manage products, inventory, and orders.
+This is a full-stack e-commerce web application built with **Spring Boot (Java)** for the backend, **Html,css** for the frontend, and **PostgreSQL** for the database. The application allows users to browse products, manage a shopping cart, place orders, and process payments. Admin users can manage products, inventory, and orders.
 
 ---
 
